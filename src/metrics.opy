@@ -38,7 +38,7 @@ rule "metrics: update teams":
 	@Condition isMatchComplete() == false
 	winningTeam[0] = teamScore(eT_Player)
 	winningTeam[1] = teamScore(eT_Bot)
-	winningTeam[3] = "bots" if winningTeam[1] >= winningTeam[0] else "players"
+	winningTeam[2] = "bots" if winningTeam[1] >= winningTeam[0] else "players"
 	wait(1)
 	
 	if RULE_CONDITION:
@@ -85,9 +85,9 @@ rule "collect metrics":
 	printLog("</l>")
 	printLog("</d>")
 	
-	if isMatchComplete():
+	if isMatchComplete() and xmlIsOpenTag:
 		printLog("<r mt='{}' t1='{}' t2='{}' tr='{}' />".format(getTotalTimeElapsed(),
-			teamScore(Team.1), teamScore(Team.2), winningTeam[3]))
+			winningTeam[0], winningTeam[1], winningTeam[2]))
 		printLog("</m>")
 		enableInspector()
 		return
