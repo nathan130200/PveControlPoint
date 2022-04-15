@@ -2,6 +2,7 @@
 	
 declareVariables('global', [
 	'xmlIsOpenTag',
+	'winningTeam',
 	'xmlMatchStatus',
 	'xmlEntityIndex',
 	'xmlEntity',
@@ -32,14 +33,22 @@ rule "random match id":
 #!define botXML(slot) xmlEntity = getPlayersInSlot(slot, eT_Bot)\
 	printLog("<b x='{}' h='{}' l='{}' e='{}' dm='{}' sm='{}' st='{}' />".format(slot, heroIndex(xmlEntity), xmlEntity.botLevel, xmlEntity.botExp, xmlEntity.dmgModifier, xmlEntity.speedModifier, xmlStat(xmlEntity)))
 
+rule "metrics: update teams":
+	@Event global
+	@Condition isMatchComplete() == false
+	winningTeam[0] = teamScore(eT_Player)
+	winningTeam[1] = teamScore(eT_Bot)
+	winningTeam[3] = "bots" if winningTeam[1] >= winningTeam[0] else "players"
+	wait(1)
+	
+	if RULE_CONDITION:
+		goto RULE_START
+
 rule "warning hostplayer about DONT open inspector!":
 	@Event global
 	@Condition optEnableTelemetry
 	@Condition not optDisableInspectorRecording
 	hudSubheader(hostPlayer, "\u200b\nDear host player!\n\nMatch telemetry is enabled! Please avoid opening workshop inspector or\nyour game can crash for many log entries! You can open metrics logs inside:\n '%USERPROFILE%\\Documents\\Overwatch\\Workshop' folder!\n\nContains XML serialized data for track bot stats in this match.", HudPosition.RIGHT, -99, Color.ORANGE, HudReeval.VISIBILITY, SpecVisibility.ALWAYS)
-
-#!define getWonTeam() ("bots" if teamScore(eT_Bot) >= teamScore(eT_Player) else "players")
-
 rule "collect metrics":
 	@Event global
 	@Condition optEnableTelemetry
@@ -78,7 +87,7 @@ rule "collect metrics":
 	
 	if isMatchComplete():
 		printLog("<r mt='{}' t1='{}' t2='{}' tr='{}' />".format(getTotalTimeElapsed(),
-			teamScore(Team.1), teamScore(Team.2), getWonTeam()))
+			teamScore(Team.1), teamScore(Team.2), winningTeam[3]))
 		printLog("</m>")
 		enableInspector()
 		return
