@@ -2,7 +2,7 @@ let code = '';
 let macros = '';
 let index = 0;
 
-let baseVarName = (() => {
+let baseVarName = '_' + (() => {
     var alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var str = '';
     for (var i = 0; i < 16; i++)
@@ -36,8 +36,6 @@ for (let param of params) {
     code += `\tconfig[${index}] = createWorkshopSetting(${type}, "${desc}", "${name}", ${value}, 0)\n`;
     index++;
 }
-
-baseVarName = '_var_' + baseVarName;
 
 `
 globalvar ${baseVarName}
