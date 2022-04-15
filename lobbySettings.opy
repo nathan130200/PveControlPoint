@@ -49,6 +49,7 @@ settings {
         "Exp per Level Up": 300,
         "Max bot level": -1,
 		"Player Shield Increment Modifier On Bot Team Kill": 2.5,
-		"Enable Telemetry": true
+		"Enable Telemetry": false,
+		"Disable Inspector Recording": true
     }
 }

@@ -1,7 +1,7 @@
 #!mainFile "../main.opy"
 	
 declareVariables('global', [
-	'xmlIsOpenTag',
+	'xmlStarted',
 	'teamParams',
 	'xmlMatchStatus',
 	'xmlEntityIndex',
@@ -59,12 +59,9 @@ rule "collect metrics":
 	@Condition optEnableTelemetry
 	@Condition not optDisableInspectorRecording
 		
-	if not xmlIsOpenTag:
-		if optDisableInspectorRecording:
-			disableInspector()
-		
+	if not xmlStarted:		
 		printLog("<m s='{}'>".format(matchId))
-		xmlIsOpenTag = true
+		xmlStarted = true
 	
 	if isAssemblingHeroes():
 		xmlMatchStatus = 1
@@ -89,11 +86,10 @@ rule "collect metrics":
 	printLog("</l>")
 	printLog("</d>")
 	
-	if isMatchComplete() and xmlIsOpenTag:
+	if isMatchComplete() and xmlStarted:
 		printLog("<r mt='{}' t1='[{},{}]' t2='[{},{}]' tr='{}' />".format(getTotalTimeElapsed(),
 			teamParams[0][0], teamParams[0][1], teamParams[1][0], teamParams[1][1], teamParams[2]))
 		printLog("</m>")
-		enableInspector()
 		return
 		
 	wait(optTelemetryIntervalSeconds)

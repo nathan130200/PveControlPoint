@@ -62,10 +62,12 @@ rule "skip assemble heroes phase":
 	@Condition isAssemblingHeroes()
 	@Condition optSkipAssembleHeroesPhase
 	setMatchTime(1)
-	wait(1.5)
 	
-	if optSkipSetupPhase:
-		setMatchTime(optSetupPhaseSkipTime)
+rule "set setup phase":
+	@Event global
+	@Condition isInSetup()
+	@Condition optSkipSetupPhase
+	setMatchTime(optSetupPhaseTimeSeconds)
 	
 rule "bot: fast respawn":
 	@Event eachPlayer

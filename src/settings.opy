@@ -38,15 +38,15 @@ declareConfigs([
 		group: "Core"
 	},
 	{
-		name: "Skip setup phase",
+		name: "Skip Setup Phase",
 		type: "bool",
 		value: true,
 		group: "Core"
 	},
 	{
-		name: "Setup phase skip time",
+		name: "Setup Phase Time Seconds",
 		type: "float[5:10]",
-		value: 6,
+		value: 10,
 		group: "Core"
 	},
 	{
