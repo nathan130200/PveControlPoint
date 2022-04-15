@@ -37,7 +37,7 @@ rule "player: reset armor protection":
 	@Event playerDied
 	@Condition victim.getTeam() == eT_Player
 	@Condition victim.healthPoolID != -1
-	victim.removeAllHealthPools()
+	removeHealthPool(victim.healthPoolID)
 	victim.healthPoolID = -1
 	
 rule "bot: update stuff":
