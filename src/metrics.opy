@@ -2,7 +2,7 @@
 	
 declareVariables('global', [
 	'xmlIsOpenTag',
-	'winningTeam',
+	'teamParams',
 	'xmlMatchStatus',
 	'xmlEntityIndex',
 	'xmlEntity',
@@ -36,9 +36,14 @@ rule "random match id":
 rule "metrics: update teams":
 	@Event global
 	@Condition isMatchComplete() == false
-	winningTeam[0] = teamScore(eT_Player)
-	winningTeam[1] = teamScore(eT_Bot)
-	winningTeam[2] = "bots" if winningTeam[1] >= winningTeam[0] else "players"
+	teamParams[0] = [teamScore(eT_Player), getControlScorePercentage(eT_Player)]
+	teamParams[1] = [teamScore(eT_Bot), getControlScorePercentage(eT_Bot)]
+	
+	if teamParams[0][0] == teamParams[1][0]:
+		teamParams[2] = "bots" if teamParams[1][1] >= teamParams[0][1] else "players"
+	else:
+		teamParams[2] = "bots" if teamParams[1][0] > teamParams[0][0] else "players"
+		
 	wait(1)
 	
 	if RULE_CONDITION:
@@ -48,7 +53,7 @@ rule "warning hostplayer about DONT open inspector!":
 	@Event global
 	@Condition optEnableTelemetry
 	@Condition not optDisableInspectorRecording
-	hudSubheader(hostPlayer, "\u200b\nDear host player!\n\nMatch telemetry is enabled! Please avoid opening workshop inspector or\nyour game can crash for many log entries! You can open metrics logs inside:\n '%USERPROFILE%\\Documents\\Overwatch\\Workshop' folder!\n\nContains XML serialized data for track bot stats in this match.", HudPosition.RIGHT, -99, Color.ORANGE, HudReeval.VISIBILITY, SpecVisibility.ALWAYS)
+	hudSubtext(hostPlayer, "\u200b\nDear host player!\n\nMatch telemetry is enabled! Please avoid opening workshop inspector or\nyour game can crash for many log entries! You can open metrics logs inside:\n '%USERPROFILE%\\Documents\\Overwatch\\Workshop' folder!\n\nAccess: https://github.com/nathan130200/PveControlPoint\nFor more details about this feature.", HudPosition.RIGHT, -99, Color.ORANGE, HudReeval.VISIBILITY, SpecVisibility.ALWAYS)
 rule "collect metrics":
 	@Event global
 	@Condition optEnableTelemetry
@@ -74,8 +79,7 @@ rule "collect metrics":
 	else:
 		xmlMatchStatus = -1
 		
-	printLog("<d ms='{}' st='{}'>".format(xmlMatchStatus, getMatchTime()))
-	printLog("<cp i='{}' p='{}' l='{}'/>".format(getCurrentObjective(), getCapturePercentage(), 1 if isControlPointLocked() else 0))
+	printLog("<d ms='{}' st='{}' i='{} l='{}'>".format(xmlMatchStatus, getMatchTime(), getCurrentObjective(), 1 if isControlPointLocked() else 0))
 	printLog("<l>".format(len(getPlayers(eT_Bot))))
 	
 	for xmlEntityIndex in range(getNumberOfSlots(eT_Bot)):
@@ -86,8 +90,8 @@ rule "collect metrics":
 	printLog("</d>")
 	
 	if isMatchComplete() and xmlIsOpenTag:
-		printLog("<r mt='{}' t1='{}' t2='{}' tr='{}' />".format(getTotalTimeElapsed(),
-			winningTeam[0], winningTeam[1], winningTeam[2]))
+		printLog("<r mt='{}' t1='[{},{}]' t2='[{},{}]' tr='{}' />".format(getTotalTimeElapsed(),
+			teamParams[0][0], teamParams[0][1], teamParams[1][0], teamParams[1][1], teamParams[2]))
 		printLog("</m>")
 		enableInspector()
 		return
