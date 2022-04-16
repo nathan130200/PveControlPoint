@@ -3,7 +3,7 @@
 rule "setup bots hud":
 	@Event eachPlayer
 	@Team eT_Bot
-	hudText(localPlayer, heroIcon(eventPlayer.getCurrentHero()), "{} / LVL: {} / HP: {}% / XP: {}".format(eventPlayer, eventPlayer.botLevel, scaledHealth(eventPlayer), eventPlayer.botHudTextValue), "DAMAGE: {}% / SPEED: {}%".format(optBotBaseDamagePercent + eventPlayer.dmgModifier, optBotBaseMoveSpeedPercent + eventPlayer.speedModifier), HudPosition.LEFT, (-10) - (eventPlayer.getSlot() * -1), Color.LIME_GREEN, Color.ROSE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
+	hudText(localPlayer, heroIcon(eventPlayer.getCurrentHero()), "{} / LVL: {} / HP: {}% / EXP: {}".format(eventPlayer.getCurrentHero(), eventPlayer.botLevel, scaledHealth(eventPlayer), eventPlayer.botHudTextValue), "DAMAGE: {}% / SPEED: {}%".format(eventPlayer.botFinalDamage, eventPlayer.botFinalSpeed), HudPosition.LEFT, (-10) - (eventPlayer.getSlot() * -1), Color.LIME_GREEN, Color.ROSE, Color.ORANGE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.ALWAYS)
 	eventPlayer.botHudText = getLastCreatedText()
 	
 rule "bot: format exp for display":

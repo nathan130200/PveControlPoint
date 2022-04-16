@@ -1,37 +1,13 @@
 #!mainFile "../main.opy"
-	
-declareVariables('global', [
-	'xmlStarted',
-	'teamParams',
-	'xmlMatchStatus',
-	'xmlEntityIndex',
-	'xmlEntity',
-	'matchId'
-])
 
 rule "random match id":
 	@Event global
 	matchId[1] = ["0","1","2","3","4","5","6","7","8","9"]
 	
-	for xmlEntityIndex in range(0, 256):
+	for xmlEntityIndex in range(0, 16):
 		matchId[0] = "{}{}".format(matchId[0], matchId[1][random.randint(0, len(matchId[1]) - 1)])
 	
 	matchId = matchId[0]
-
-#!define xmlStat(entity) "[{},{},{},{},{},{},{},{}]".format(\
-	entity.getStatistic(Stat.DAMAGE_DEALT),\
-	entity.getStatistic(Stat.DAMAGE_TAKEN),\
-	entity.getStatistic(Stat.HEALING_DEALT),\
-	entity.getStatistic(Stat.DAMAGE_BLOCKED),\
-	entity.getStatistic(Stat.FINAL_BLOWS),\
-	entity.getStatistic(Stat.DEFENSIVE_ASSISTS),\
-	entity.getStatistic(Stat.OFFENSIVE_ASSISTS),\
-	entity.getUltCharge())
-	
-#!define heroIndex(entity) getAllHeroes().index(entity.getCurrentHero())
-
-#!define botXML(slot) xmlEntity = getPlayersInSlot(slot, eT_Bot)\
-	printLog("<b x='{}' h='{}' l='{}' e='{}' dm='{}' sm='{}' st='{}' />".format(slot, heroIndex(xmlEntity), xmlEntity.botLevel, xmlEntity.botExp, xmlEntity.dmgModifier, xmlEntity.speedModifier, xmlStat(xmlEntity)))
 
 rule "metrics: update teams":
 	@Event global
@@ -54,6 +30,12 @@ rule "warning hostplayer about DONT open inspector!":
 	@Condition optEnableTelemetry
 	@Condition not optDisableInspectorRecording
 	hudSubtext(hostPlayer, "\u200b\nDear host player!\n\nMatch telemetry is enabled! Please avoid opening workshop inspector or\nyour game can crash for many log entries! You can open metrics logs inside:\n '%USERPROFILE%\\Documents\\Overwatch\\Workshop' folder!\n\nAccess: https://github.com/nathan130200/PveControlPoint\nFor more details about this feature.", HudPosition.RIGHT, -99, Color.ORANGE, HudReeval.VISIBILITY, SpecVisibility.ALWAYS)
+	
+rule "disable inspector if needed":
+	@Event global
+	@Condition optDisableInspectorRecording
+	disableInspector()
+	
 rule "collect metrics":
 	@Event global
 	@Condition optEnableTelemetry

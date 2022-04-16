@@ -7,22 +7,23 @@ settings {
     },
     "lobby": {
         "allowPlayersInQueue": true,
-        "mapRotation": "paused",
+        "mapRotation": "afterGame",
         "returnToLobby": "afterGame",
         "swapTeamsAfterMatch": false
     },
     "gamemodes": {
         "control": {
-			"scoreToWin": 1
+			"scoreToWin": 2
 		},
         "general": {
-            "captureSpeed%": 125,
+            "captureSpeed%": 105,
             "enableCompetitiveRules": true,
-            "gamemodeStartTrigger": "immediately",
+            "gamemodeStartTrigger": "allSlotsFilled",
+            "enableKillCam": false,
             "enableKillCam": false,
             "respawnTime%": 70,
-            "scoringSpeed%": 125,
-            "spawnHealthPacks": "disabled"
+            "scoringSpeed%": 85,
+            "spawnHealthPacks": "enabled"
         }
     },
     "heroes": {
@@ -31,25 +32,33 @@ settings {
                 "abilityCooldown%": 50,
                 "ammoClipSize%": 150,
                 "ultDuration%": 125,
-                "ultGen%": 115,
-                "combatUltGen%": 115,
-                "passiveUltGen%": 115
+                "ultGen%": 200,
+                "combatUltGen%": 200,
+                "passiveUltGen%": 200,
+				"health%": 150
             }
-        }
+        },
+		"team1": {
+			"general": {
+				"abilityCooldown%": 45,
+				"movementSpeed%": 120
+			}
+		}
     },
 	 "workshop": {
-        "Bot Base Damage Percent": 98,
-        "Bot Base Move Speed Percent": 104,
-        "Bot Damage Increment Per Level": 0.939,
-        "Bot Speed Increment Per Level": 0.926,
-        "Exp per Elimination": 350,
-		"Exp per Damage Dealt": 250,
-		"Exp per Final Blow": 700,
-		"Exp per Healing Done": 250,
-        "Exp per Level Up": 300,
+        "Bot Base Damage Percent": 95,
+        "Bot Base Move Speed Percent": 100,
+        "Bot Damage Increment Per Level": 0.85,
+        "Bot Speed Increment Per Level": 0.9,
+		"Player Shield Increment Modifier On Kill": 8,
+        "Exp per Elimination": 150,
+		"Exp per Damage Dealt": 75,
+		"Exp per Healing Done": 45,
+		"Exp per Final Blow": 300,
+        "Exp per Level Up": 500,
         "Max bot level": -1,
-		"Player Shield Increment Modifier On Bot Team Kill": 2.5,
 		"Enable Telemetry": false,
-		"Disable Inspector Recording": true
+		"Disable Inspector Recording": false,
+		"Endless Mode": false
     }
 }
