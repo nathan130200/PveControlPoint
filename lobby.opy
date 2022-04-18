@@ -46,19 +46,8 @@ settings {
 		}
     },
 	 "workshop": {
-        "Bot Base Damage Percent": 95,
-        "Bot Base Move Speed Percent": 100,
-        "Bot Damage Increment Per Level": 0.85,
-        "Bot Speed Increment Per Level": 0.9,
-		"Player Shield Increment Modifier On Kill": 8,
-        "Exp per Elimination": 150,
-		"Exp per Damage Dealt": 75,
-		"Exp per Healing Done": 45,
-		"Exp per Final Blow": 300,
-        "Exp per Level Up": 500,
-        "Max bot level": -1,
 		"Enable Telemetry": false,
-		"Disable Inspector Recording": false,
+		"Enable Workshop Inspector": true,
 		"Endless Mode": false
     }
 }
